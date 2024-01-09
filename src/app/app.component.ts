@@ -29,6 +29,9 @@ export class AppComponent {
     { name: 'Watch signals course', isCompleted: false },
   ]);
 
+  // asReadonly() returns a readonly version of the signal
+  description = signal('Signals are awesome!').asReadonly();
+
   toggleName() {
     this.name.set('Donie');
   }
