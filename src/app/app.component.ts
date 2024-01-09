@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Task {
@@ -35,8 +35,19 @@ export class AppComponent {
   description = signal('Signals are awesome!').asReadonly();
 
   // Computed signals are signals that are computed from other signals
+  // and they are stored in memory
   taskLength = computed(() => this.tasks().length);
 
+
+  constructor() {
+    // Effects are signals that are computed from other signals
+    // but they don't have a value and they are not stored in memory
+    effect(() => {
+      if (this.taskLength() > 5)
+        alert(`You have a lot of tasks to do!`);
+
+    });
+  }
 
   /* Methods */
 
