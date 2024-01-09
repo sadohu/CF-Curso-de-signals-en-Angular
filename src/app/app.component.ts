@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Task {
@@ -17,6 +17,8 @@ interface Task {
 export class AppComponent {
   title = 'signals-example';
 
+  /* Signals and Variables */
+
   // Create a signal with a default value
 
   // Between the <> you can specify the type of the signal
@@ -31,6 +33,12 @@ export class AppComponent {
 
   // asReadonly() returns a readonly version of the signal
   description = signal('Signals are awesome!').asReadonly();
+
+  // Computed signals are signals that are computed from other signals
+  taskLength = computed(() => this.tasks().length);
+
+
+  /* Methods */
 
   toggleName() {
     this.name.set('Donie');
