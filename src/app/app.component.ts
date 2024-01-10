@@ -1,5 +1,7 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, OnInit, computed, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 interface Task {
   name: string;
@@ -14,7 +16,7 @@ interface Task {
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'signals-example';
 
   /* Signals and Variables */
@@ -38,6 +40,9 @@ export class AppComponent {
   // and they are stored in memory
   taskLength = computed(() => this.tasks().length);
 
+  // toObservable() returns an observable version of the signal
+  // This is useful when you want to use the async pipe in the template
+  tasks$ = toObservable(this.tasks);
 
   constructor() {
     // Effects are signals that are computed from other signals
@@ -47,6 +52,19 @@ export class AppComponent {
         alert(`You have a lot of tasks to do!`);
 
     });
+  }
+
+  ngOnInit(): void {
+    // this.tasks$.subscribe(response => {
+    //   console.log("response", response);
+    // });
+
+    this.tasks$.pipe(
+      map(result => {
+        const newTaks = result.map(task => ({ ...task, creationate: new Date() }));
+        return newTaks;
+      })
+    ).subscribe(response => console.log("response", response));
   }
 
   /* Methods */
